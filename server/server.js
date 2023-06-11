@@ -6,9 +6,16 @@ import bodyParser from 'body-parser';
 import { config } from 'dotenv';
 import User from './models/users/User.js';
 import Note from './models/notes/Note.js';
+import cors from 'cors';
 config();
 
 const app = express();
+
+// use cors policies
+app.use(cors({
+  origin: '*',
+  credentials: true
+}));
 
 // use body-parser package to always return response as json
 app.use(bodyParser.json());
@@ -105,7 +112,6 @@ app.post('/users', async (req, res) => {
 app.post('/login', async (req, res) => {
   try {
     const { email, password } = req.body;
-    const token = req.headers['token'];
 
     // Find the user by email in the database
     const user = await User.findOne({ email });
@@ -113,23 +119,20 @@ app.post('/login', async (req, res) => {
     if (!user) {
       return res
         .status(401)
-        .json({ error: 'User not found! Please Tru Again.' });
+        .json({ error: 'User not found! Please Try Again.' });
     }
 
     // Compare the provided password with the stored hashed password
     const isPasswordValid = await bcrypt.compare(password, user.password);
 
     if (!isPasswordValid) {
-      return res.status(401).json({ error: 'Invalid credentials' });
+      return res.status(401).json({ error: 'Invalid password' });
     }
 
-    // Verify and match JWT token given in user registration
-    try {
-      const verifiedToken = jwt.verify(token, process.env.JWT_SECRET);
-      res.json({ msg: 'Logged In Successfully!', token: verifiedToken });
-    } catch (err) {
-      res.status(401).json({ error: err });
-    }
+    const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET)
+
+    res.status(201).json({ msg: 'Logged In Successfully!', token })
+    
   } catch (error) {
     console.error('Error during login:', error);
     res.status(500).json({ error: 'Internal Server Error' });
