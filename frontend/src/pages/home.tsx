@@ -1,35 +1,56 @@
 import React, { useEffect, useState } from 'react';
 import { NextPage } from 'next';
 import { useRouter } from 'next/router';
+import Head from 'next/head';
+import jwt, { JwtPayload } from 'jsonwebtoken';
+import { config } from 'dotenv';
+config()
 
 const home: NextPage = () => {
+  const router = useRouter();
+  const [userName, setUserName] = useState('');
 
-    const router = useRouter();
+  useEffect(() => {
+    const token = localStorage.getItem('token');
 
-    // const [loading, setLoading] = useState(false);
-
-    useEffect(() => {
-
-        // const handleStart = (url) => (url !== router.asPath) setLoading(true)
-
-        const token = localStorage.getItem('token');
-
-        if(!token) {
-            router.replace('/')
-        }
-    }, [])
-
-    const logout = () => {
-      localStorage.removeItem('token')
-      router.replace('/')
+    if (!token) {
+      router.replace('/');
     }
 
-  return (
-    <div>
-      Home Page protected
-      <button className="btn btn-success" onClick={logout}>LOGOUT</button>
-    </div>
-  )
-}
+    const decodedToken = jwt.decode(token as string) as JwtPayload
+    if(decodedToken) {
+      setUserName(decodedToken.name)
+    }
+  }, []);
 
-export default home
+  const logout = () => {
+    localStorage.removeItem('token');
+    router.replace('/');
+  };
+
+  return (
+    <>
+      <Head>
+        <title>Notes App | Home</title>
+      </Head>
+      <nav className='navbar navbar-expand-lg bg-dark navbar-dark'>
+        <div className='container-fluid fs-4'>
+          <a href='/home' className='navbar-brand fs-2'>
+            Notes App
+          </a>
+          <ul className='navbar-nav ms-auto'>
+            <li className='nav-item text-light mx-3'>
+              <span className='nav-link'>Hello, <span className='fw-bold'>{userName}</span></span>
+            </li>
+            <li className="nav-item">
+              <button className="btn btn-primary btn-lg" onClick={logout}>Logout</button>
+            </li>
+          </ul>
+        </div>
+      </nav>
+      
+    </>
+  );
+};
+
+export default home;
