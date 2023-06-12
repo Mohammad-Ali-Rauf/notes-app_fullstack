@@ -101,7 +101,7 @@ app.post('/users', async (req, res) => {
     });
     await newUser.save();
 
-    const token = jwt.sign({ userId: newUser._id }, process.env.JWT_SECRET);
+    const token = jwt.sign({ userId: newUser._id, name: name, email: email, password: password }, process.env.JWT_SECRET);
 
     res.status(201).json({ newUser, token });
   } catch (err) {
@@ -115,6 +115,7 @@ app.post('/login', async (req, res) => {
 
     // Find the user by email in the database
     const user = await User.findOne({ email });
+    const name = user.name
 
     if (!user) {
       return res
@@ -129,7 +130,7 @@ app.post('/login', async (req, res) => {
       return res.status(401).json({ error: 'Invalid password' });
     }
 
-    const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET)
+    const token = jwt.sign({ userId: user._id, name: name, email: email, password: password }, process.env.JWT_SECRET)
 
     res.status(201).json({ msg: 'Logged In Successfully!', token })
     
