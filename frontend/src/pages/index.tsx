@@ -2,6 +2,8 @@ import React from 'react';
 import { type NextPage } from 'next';
 import Head from 'next/head';
 import RegisterForm from '../components/authentication/RegisterForm';
+import LoginForm from '../components/authentication/LoginForm';
+import Layout from '~/components/layout/Layout';
 
 const Home: NextPage = () => {
   return (
