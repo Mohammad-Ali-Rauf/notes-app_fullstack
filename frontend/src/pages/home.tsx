@@ -4,6 +4,7 @@ import { useRouter } from 'next/router';
 import Head from 'next/head';
 import jwt, { JwtPayload } from 'jsonwebtoken';
 import { config } from 'dotenv';
+import NoteList from '~/components/notes/NoteList';
 config()
 
 const home: NextPage = () => {
@@ -48,7 +49,7 @@ const home: NextPage = () => {
           </ul>
         </div>
       </nav>
-      
+      <NoteList />
     </>
   );
 };
