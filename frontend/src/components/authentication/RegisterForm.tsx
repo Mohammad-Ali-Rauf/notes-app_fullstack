@@ -15,6 +15,7 @@ const RegisterForm: NextPage = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [errors, setErrors] = useState<Errors>({});
+  // const [userExist, setUserExist] = useState(false);
 
   const router = useRouter();
 
@@ -126,7 +127,10 @@ const RegisterForm: NextPage = () => {
             required
           />
           {errors.name && (
-            <div style={{ width: '300px', fontSize: '22px' }} className='invalid-feedback'>
+            <div
+              style={{ width: '300px', fontSize: '22px' }}
+              className='invalid-feedback'
+            >
               {errors.name}
             </div>
           )}
@@ -143,19 +147,28 @@ const RegisterForm: NextPage = () => {
             value={email}
             type='email'
             style={{ width: '300px', fontSize: '22px' }}
-            className={`form-control ${
-              errors.email ? 'is-invalid' : ''
-            } styles[placeholder-color]`}
+            className={`form-control ${errors.email ? 'is-invalid' : ''}`}
             id='email'
             placeholder='Enter your email'
             onChange={(e) => setEmail(e.target.value)}
             required
           />
           {errors.email && (
-            <div style={{ width: '300px', fontSize: '22px' }} className='invalid-feedback'>
+            <div
+              style={{ width: '300px', fontSize: '22px' }}
+              className='invalid-feedback'
+            >
               {errors.email}
             </div>
           )}
+          {/* {userExist && (
+            <div
+              style={{ width: '300px', fontSize: '22px' }}
+              className='invalid-feedback'
+            >
+              User with this email already exist.
+            </div>
+          )} */}
         </div>
         <div className='mb-3'>
           <label
@@ -177,7 +190,10 @@ const RegisterForm: NextPage = () => {
             minLength={6}
           />
           {errors.password && (
-            <div style={{ width: '300px', fontSize: '22px' }} className='invalid-feedback'>
+            <div
+              style={{ width: '300px', fontSize: '22px' }}
+              className='invalid-feedback'
+            >
               {errors.password}
             </div>
           )}
@@ -186,7 +202,15 @@ const RegisterForm: NextPage = () => {
           Register
         </button>
 
-        <h1 className='h4 mt-3'>Already have an account? <Link href='/login' className='fw-bold link-success text-decoration-none'>Login</Link></h1>
+        <h1 className='h4 mt-3'>
+          Already have an account?{' '}
+          <Link
+            href='/login'
+            className='fw-bold link-success text-decoration-none'
+          >
+            Login
+          </Link>
+        </h1>
       </form>
     </div>
   );

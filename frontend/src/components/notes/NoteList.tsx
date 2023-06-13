@@ -8,6 +8,7 @@ interface Note {
   content: string;
   id: any;
   _id: any;
+  createdAt: any;
 }
 
 const NoteList: React.FC = () => {
@@ -81,7 +82,7 @@ const NoteList: React.FC = () => {
   return (
     <div className='text-center'>
       <h2 className='mt-4'>My Notes</h2>
-      <button className='btn btn-primary' onClick={openForm}>
+      <button className='btn btn-primary btn-lg' onClick={openForm}>
         Add Note
       </button>
 
