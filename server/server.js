@@ -181,6 +181,21 @@ app.patch('/notes/:id', authenticateToken, async (req, res) => {
   }
 });
 
+app.get('/notes/:id', authenticateToken, async (req, res) => {
+  try {
+    const noteId = req.params.id
+    const note = await Note.findById({ noteId })
+
+    if (!note) {
+      res.json({ msg: 'Note not found' })
+    }
+
+    res.json({ note })
+  } catch (err) {
+    
+  }
+})
+
 app.delete('/notes/:id', authenticateToken, async (req, res) => {
   try {
     const noteId = req.params.id;

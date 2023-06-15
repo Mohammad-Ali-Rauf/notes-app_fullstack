@@ -12,9 +12,10 @@ interface Note {
 interface NoteItemProps {
   note: Note;
   onDelete: () => void;
+  onUpdate: (id: any, title: string, content: string) => void;
 }
 
-const NoteItem: React.FC<NoteItemProps> = ({ note, onDelete }) => {
+const NoteItem: React.FC<NoteItemProps> = ({ note, onDelete, onUpdate }) => {
   const [timeAgo, setTimeAgo] = useState<string>('');
 
   useEffect(() => {
@@ -59,12 +60,16 @@ const NoteItem: React.FC<NoteItemProps> = ({ note, onDelete }) => {
             <div className='card-body'>
               <h3 className='card-title'>Title: {note.title}</h3>
               <p className='card-text'>Content: {note.content}</p>
-              <p className='card-text'>Created: {timeAgo} at {formattedDate}</p>
+              <p className='card-text'>
+                Created: {timeAgo} at {formattedDate}
+              </p>
               <div className='mb-3'>
                 <button className='btn btn-danger me-2' onClick={onDelete}>
                   Delete
                 </button>
-                <button className='btn btn-warning'>Edit</button>
+                <button className='btn btn-warning' onClick={() => onUpdate(note._id, note.title, note.content)}>
+                  Edit
+                </button>
               </div>
             </div>
           </div>
